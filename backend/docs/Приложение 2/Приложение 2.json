@@ -1,0 +1,142 @@
+[
+  {
+    "tagName": "p",
+    "class": "c238 c173 c73 c30",
+    "content": [{ "tagName": "span", "class": "c14", "content": [] }]
+  },
+  {
+    "tagName": "p",
+    "class": "c238 c173 c73",
+    "content": [
+      {
+        "tagName": "span",
+        "class": "c14",
+        "content": ["ТЕРМИНЫ И ОПРЕДЕЛЕНИЯ"]
+      }
+    ]
+  },
+  {
+    "tagName": "p",
+    "class": "c173 c73 c30 c278",
+    "content": [{ "tagName": "span", "class": "c14", "content": [] }]
+  },
+  {
+    "tagName": "p",
+    "class": "c2 c173",
+    "content": [
+      {
+        "tagName": "span",
+        "class": "c14",
+        "content": [
+          "1. Под коксохимическим предприятием понимается также коксохимический завод, коксохимическое производство, которые могут быть как самостоятельными, так и входить в состав металлургического комбината (завода) или производственного объединения."
+        ]
+      }
+    ]
+  },
+  {
+    "tagName": "p",
+    "class": "c2 c173",
+    "content": [
+      {
+        "tagName": "span",
+        "class": "c14",
+        "content": [
+          "2. Закрытым помещением является также помещение, которое имеет ограждающие конструкции (стены) со всех сторон и перекрытие (покрытие)."
+        ]
+      }
+    ]
+  },
+  {
+    "tagName": "p",
+    "class": "c2 c173",
+    "content": [
+      {
+        "tagName": "span",
+        "class": "c14",
+        "content": [
+          "3. Во избежание неоднократных повторений некоторые наименования применяются с сокращениями, например:"
+        ]
+      }
+    ]
+  },
+  {
+    "tagName": "ul",
+    "class": "c15 lst-kix_list_10-0",
+    "content": [
+      {
+        "tagName": "li",
+        "class": "c2 c198 li-bullet-0",
+        "content": [
+          {
+            "tagName": "span",
+            "class": "c14",
+            "content": ["вместо «коксовая батарея» – «батарея»;"]
+          }
+        ]
+      },
+      {
+        "tagName": "li",
+        "class": "c2 c198 li-bullet-0",
+        "content": [
+          {
+            "tagName": "span",
+            "class": "c14",
+            "content": ["вместо «коксовые печи» – «печи»;"]
+          }
+        ]
+      },
+      {
+        "tagName": "li",
+        "class": "c2 c198 li-bullet-0",
+        "content": [
+          {
+            "tagName": "span",
+            "class": "c14",
+            "content": ["вместо «каменноугольная смола» – «смола»; и т.п."]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "tagName": "p",
+    "class": "c2 c61",
+    "content": [
+      {
+        "tagName": "span",
+        "class": "c14",
+        "content": [
+          "4. Производственная сточная вода – сточная вода, которая образуется за счет влаги угольной шихты во время коксования, ливневых, шламовых (после очистки), грунтовых вод, которые не прошли биохимическую очистку."
+        ]
+      }
+    ]
+  },
+  {
+    "tagName": "p",
+    "class": "c2 c61",
+    "content": [
+      {
+        "tagName": "span",
+        "class": "c14",
+        "content": [
+          "5. Производственная вода – производственная вода, которая прошла механическую и биохимическую очистку."
+        ]
+      }
+    ]
+  },
+  {
+    "tagName": "p",
+    "class": "c2 c30 c61",
+    "content": [{ "tagName": "span", "class": "c14", "content": [] }]
+  },
+  {
+    "tagName": "hr",
+    "style": "page-break-before:always;display:none;",
+    "content": []
+  },
+  {
+    "tagName": "p",
+    "class": "c0",
+    "content": [{ "tagName": "span", "class": "c14", "content": [] }]
+  }
+]
