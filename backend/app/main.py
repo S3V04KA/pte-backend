@@ -5,12 +5,12 @@ from jose import JWTError, jwt
 
 from app.utils import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
 from app.DB import add_chapter, add_favorate_db, add_section, add_user, get_all_chapters, get_chapter, get_favorates, get_formated_chapter, get_section, get_sections, get_user, search
-from app.Models import Chapter, RegisterUser, Section, UserInDB
+from app.Models import Chapter, ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, Section, SectionResponse, TokenModel, UserInDB, UserResponse
 
 app = FastAPI()
 
 @app.post("/token")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -> TokenModel:
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -25,7 +25,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/users/me")
-async def read_users_me(token: str = Depends(oauth2_scheme)):
+async def read_users_me(token: str = Depends(oauth2_scheme)) -> UserResponse:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -45,7 +45,7 @@ async def read_users_me(token: str = Depends(oauth2_scheme)):
     return user
 
 @app.post('/users/favorates/{chapter_id}')
-async def add_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)):
+async def add_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)) -> list[ChapterResponse]:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -59,13 +59,13 @@ async def add_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)):
         token_data = username
     except JWTError:
         raise credentials_exception
-    user = await add_favorate_db(token_data, chapter_id)
-    if user is None:
+    favorates = await add_favorate_db(token_data, chapter_id)
+    if favorates is None:
         raise credentials_exception
-    return user
+    return favorates
 
 @app.get('/users/favorates')
-async def get_favorates_get(token: str = Depends(oauth2_scheme)):
+async def get_favorates_get(token: str = Depends(oauth2_scheme)) -> list[ChapterResponse]:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -99,24 +99,24 @@ async def register_user(user: RegisterUser):
     return {"message": "User successfully registered"}
 
 @app.get('/chapter')
-async def get_chapters():
+async def get_chapters() -> list[ChapterResponseNoContent]:
     return await get_all_chapters()
 
 @app.get('/chapter/{chapter_id}')
-async def get_highlighted_chapter(chapter_id: str, query: str | None = None, iter: int | None = None):
+async def get_highlighted_chapter(chapter_id: str, query: str | None = None, iter: int | None = None) -> ChapterResponse:
     if query is None and iter is None:
         return await get_chapter(chapter_id)
     else:
         return await get_formated_chapter(chapter_id, query, iter)
 
 @app.get('/section')
-async def get_sections_get():
+async def get_sections_get() -> list[SectionResponse]:
     return await get_sections()
 
 @app.get('/section/{section_id}')
-async def get_section_from_id(section_id: str):
+async def get_section_from_id(section_id: str) -> SectionResponse:
     return await get_section(section_id)
 
 @app.get('/search')
-async def search_post(query: str):
+async def search_post(query: str) -> list[SearchResponse]:
     return await search(query)

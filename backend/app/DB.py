@@ -4,7 +4,7 @@ import os
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from app.Models import Chapter, ChapterResponse, Section, UserInDB, UserResponse
+from app.Models import Chapter, ChapterResponse, ChapterResponseNoContent, SearchResponse, Section, SectionResponse, UserInDB, UserResponse
 
 MONGO_DETAILS = f"mongodb://{os.environ.get('MONGO_USER')}:{os.environ.get('MONGO_PASSWORD')}@mongo:27017"
 client = AsyncIOMotorClient(MONGO_DETAILS)
@@ -46,7 +46,7 @@ async def get_favorates(username: str):
     favorates = []
     for i in user['favorates']:
         chapter = await chapters_collection.find_one({"_id": ObjectId(i)})
-        favorates.append({'id': str(chapter['_id']), 'name': chapter['name']})
+        favorates.append(ChapterResponse(**chapter))
     return favorates
 
 async def add_favorate_db(username: str, chapter_id: str):
@@ -66,7 +66,7 @@ async def add_chapter(chapter_data: Chapter):
 async def get_all_chapters():
     chapters = []
     async for chapter in chapters_collection.find():
-        chapters.append({'name': chapter['name'], 'id': str(chapter['_id'])})
+        chapters.append(ChapterResponseNoContent(id=str(chapter['_id']), name=chapter['name']))
     return chapters
 
 async def get_chapter(chapter_id: str):
@@ -83,7 +83,7 @@ async def get_many_chapters(chapter_ids: list[str]):
     finded = chapters_collection.find({"_id": {"$in": ids}})
     async for chapter in finded:
         id = str(chapter['_id'])
-        ch = {'name': chapter['name'], 'id': id, 'content': chapter['content']}
+        ch = {'name': chapter['name'], 'id': id}
         chapters.append(dict(ch))
     return chapters
 
@@ -97,7 +97,7 @@ async def add_section(section_data: Section):
 async def get_sections():
     sections = []
     async for section in sections_collection.find():
-        sections.append({'name': section['name'], 'id': str(section['_id']), 'chapterIds': section['chapterIds']})
+        sections.append(SectionResponse(**section))
     return sections
 
 async def get_section(section_id: str):
@@ -105,10 +105,10 @@ async def get_section(section_id: str):
     if not section:
         return None
     section['chapters'] = (await get_many_chapters(section['chapterIds']))
-    del section['chapterIds']
-    section['id'] = str(section['_id'])
-    del section['_id']
-    return section
+    section['chapterIds'] = None
+    # section['id'] = str(section['_id'])
+    # del section['_id']
+    return SectionResponse(**section)
 
 async def find_substring_in_content(elements, substring, new_class, modified_elements=None):
     if modified_elements is None:
@@ -143,7 +143,7 @@ async def search(substring: str):
     for i in range(len(chapters)):
         modified_elements = await find_substring_in_content(chapters[i]['content'], substring, 'highlighted')
         for j in range(len(modified_elements)):
-            searchs.append({'Id': cnt, 'chapterId': chapters[i]['id'], 'chapterName': chapters[i]['name'], 'iter': modified_elements[j]['iter'], 'contentElement': modified_elements[j]['el']})
+            searchs.append(SearchResponse(id=cnt, chapterId=chapters[i]['id'], chapterName=chapters[i]['name'], iter=modified_elements[j]['iter'], contentElement=modified_elements[j]['el']))
             cnt+=1
     return searchs
 
@@ -154,4 +154,4 @@ async def get_formated_chapter(chapter_id: str, substring: str, iter: int):
     content = chapter['content']
     await update_class_value_if_substring_in_content(content, substring, 'highlighted')
     json_str = json.dumps(content, ensure_ascii=False).replace(' highlighted', '', iter).replace('highlighted', 'Temp', 1).replace(' highlighted', '').replace('Temp', 'highlighted', 1)
-    return json.loads(json_str)
+    return ChapterResponse(id=str(chapter['_id']), name=chapter['name'], content=json.loads(json_str))
