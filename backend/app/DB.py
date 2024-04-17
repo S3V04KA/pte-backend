@@ -13,10 +13,22 @@ user_collection = users_database.get_collection("users_collection")
 chapters_collection = users_database.get_collection("chapters_collection")
 sections_collection = users_database.get_collection("sections_collection")
 
+paths = [
+    'РАЗДЕЛ 1. СТРУКТУРА И ОРГАНИЗАЦИЯ УПРАВЛЕНИЯ',
+    'РАЗДЕЛ 2. ОСНОВНОЕ ПРОИЗВОДСТВО',
+    'РАЗДЕЛ 3. ВСПОМОГАТЕЛЬНЫЕ СЛУЖБЫ',
+    'РАЗДЕЛ 4. ЭКОЛОГИЧЕСКАЯ БЕЗОПАСНОСТЬ',
+    'РАЗДЕЛ 5. КОНТРОЛЬ ПРОИЗВОДСТВА',
+    'Приложение 1',
+    'Приложение 2',
+    'Приложение 3',
+    'ЗАКЛЮЧЕНИЕ'
+]
+
 async def init():
     length = len(await sections_collection.find().to_list(10))
     if length == 0:
-        for i in os.listdir('./docs'):
+        for i in paths:
             chapterIds = []
             for root, dirs, files in os.walk(f'./docs/{i}'):
                 for file in files:
