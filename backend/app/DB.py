@@ -153,7 +153,7 @@ async def search(substring: str):
     searchs = []
     chapters = []
     async for chapter in chapters_collection.find():
-        section = await sections_collection.find_one({'chapterIds': {'$in': [chapter['id']]}})
+        section = await sections_collection.find_one({'chapterIds': {'$in': [str(chapter['_id'])]}})
         chapters.append({'name': chapter['name'], 'id': str(chapter['_id']), 'content': chapter['content'], 'sectionName': section['name']})
     cnt = 0
     for i in range(len(chapters)):
