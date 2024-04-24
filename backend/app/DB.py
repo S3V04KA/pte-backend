@@ -34,7 +34,7 @@ async def init():
                 for file in files:
                     with open(f'./docs/{i}/{file}', 'r') as f:
                         chapters.append(Chapter(name=file.split('.')[0], content=json.loads(f.read())).model_dump())
-            chapters.sort(key=lambda chapter: chapter.name)
+            chapters.sort(key=lambda chapter: chapter['name'])
             chs = await chapters_collection.insert_many(chapters)
             section = await sections_collection.insert_one(Section(name=i, chapterIds=chs.inserted_ids).model_dump())
     
