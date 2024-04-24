@@ -29,13 +29,14 @@ async def init():
     length = len(await sections_collection.find().to_list(10))
     if length == 0:
         for i in paths:
-            chapterIds = []
+            chapters = []
             for root, dirs, files in os.walk(f'./docs/{i}'):
                 for file in files:
                     with open(f'./docs/{i}/{file}', 'r') as f:
-                        chapter = await chapters_collection.insert_one(Chapter(name=file.split('.')[0], content=json.loads(f.read())).model_dump())
-                        chapterIds.append(str(chapter.inserted_id))
-            section = await sections_collection.insert_one(Section(name=i, chapterIds=chapterIds).model_dump())
+                        chapters.append(Chapter(name=file.split('.')[0], content=json.loads(f.read())))
+            chapters.sort(key=lambda chapter: chapter.name)
+            chs = await chapters_collection.insert_many(chapters)
+            section = await sections_collection.insert_one(Section(name=i, chapterIds=chs.inserted_ids).model_dump())
     
 asyncio.create_task(init())
 
@@ -150,12 +151,13 @@ async def search(substring: str):
     searchs = []
     chapters = []
     async for chapter in chapters_collection.find():
-        chapters.append({'name': chapter['name'], 'id': str(chapter['_id']), 'content': chapter['content']})
+        section = await sections_collection.find_one({'chapterIds': chapter['_id']})
+        chapters.append({'name': chapter['name'], 'id': str(chapter['_id']), 'content': chapter['content'], 'sectionName': section['name']})
     cnt = 0
     for i in range(len(chapters)):
         modified_elements = await find_substring_in_content(chapters[i]['content'], substring, 'highlighted')
         for j in range(len(modified_elements)):
-            searchs.append(SearchResponse(id=cnt, chapterId=chapters[i]['id'], chapterName=chapters[i]['name'], iter=modified_elements[j]['iter'], contentElement=modified_elements[j]['el']))
+            searchs.append(SearchResponse(id=cnt, chapterId=chapters[i]['id'], chapterName=chapters[i]['name'], iter=modified_elements[j]['iter'], contentElement=modified_elements[j]['el'], sectionName=chapters[i]['sectionName']))
             cnt+=1
     return searchs
 
