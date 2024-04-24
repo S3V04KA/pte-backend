@@ -123,8 +123,6 @@ async def get_section(section_id: str):
         return None
     section['chapters'] = (await get_many_chapters(section['chapterIds']))
     section['chapterIds'] = None
-    # section['id'] = str(section['_id'])
-    # del section['_id']
     return SectionResponse(chapters=section['chapters'], chapterIds=None, id=section['_id'], name=section['name'])
 
 async def find_substring_in_content(elements, substring, new_class, modified_elements=None):
@@ -155,7 +153,7 @@ async def search(substring: str):
     searchs = []
     chapters = []
     async for chapter in chapters_collection.find():
-        section = await sections_collection.find_one({'chapterIds': chapter['_id']})
+        section = await sections_collection.find_one({'chapterIds': {'$in': [chapter['_id']]}})
         chapters.append({'name': chapter['name'], 'id': str(chapter['_id']), 'content': chapter['content'], 'sectionName': section['name']})
     cnt = 0
     for i in range(len(chapters)):
