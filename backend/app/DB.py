@@ -122,7 +122,7 @@ async def get_section(section_id: str):
     section['chapterIds'] = None
     # section['id'] = str(section['_id'])
     # del section['_id']
-    return SectionResponse(chapters=section['chapters'], chapterIds=None, id=section['id'], name=section['name'])
+    return SectionResponse(chapters=section['chapters'], chapterIds=None, id=section['_id'], name=section['name'])
 
 async def find_substring_in_content(elements, substring, new_class, modified_elements=None):
     if modified_elements is None:
