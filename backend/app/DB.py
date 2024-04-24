@@ -154,6 +154,8 @@ async def search(substring: str):
     chapters = []
     async for chapter in chapters_collection.find():
         section = await sections_collection.find_one({'chapterIds': {'$in': [chapter['_id']]}})
+        with open('./test.txt', 'w') as f: 
+            f.write(str(section))
         chapters.append({'name': chapter['name'], 'id': str(chapter['_id']), 'content': chapter['content'], 'sectionName': section['name']})
     cnt = 0
     for i in range(len(chapters)):
