@@ -64,6 +64,26 @@ async def add_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)) -> 
         raise credentials_exception
     return favorates
 
+@app.delete('/users/favorates/{chapter_id}')
+async def delete_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)) -> list[ChapterResponse]:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = username
+    except JWTError:
+        raise credentials_exception
+    favorates = await delete_favorate_db(token_data, chapter_id)
+    if favorates is None:
+        raise credentials_exception
+    return favorates
+
 @app.get('/users/favorates')
 async def get_favorates_get(token: str = Depends(oauth2_scheme)) -> list[ChapterResponse]:
     credentials_exception = HTTPException(

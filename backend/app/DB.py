@@ -75,6 +75,15 @@ async def add_favorate_db(username: str, chapter_id: str):
         await user_collection.update_one({"_id": user['_id']}, {"$set": {"favorates": user['favorates']}})
     return await get_favorates(username)
 
+async def delete_favorate_db(username: str, chapter_id: str):
+    user = await user_collection.find_one({"username": username})
+    if not user:
+        return None
+    if chapter_id in user['favorates']:
+        user['favorates'].remove(chapter_id)
+        await user_collection.update_one({"_id": user['_id']}, {"$set": {"favorates": user['favorates']}})
+    return await get_favorates(username)
+
 async def add_chapter(chapter_data: Chapter):
     chapter = await chapters_collection.insert_one(chapter_data.model_dump())
     new_chapter = await chapters_collection.find_one({"_id": chapter.inserted_id})
