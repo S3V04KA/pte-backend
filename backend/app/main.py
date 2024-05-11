@@ -4,8 +4,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 
 from app.utils import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
-from app.DB import add_chapter, add_favorate_db, add_section, add_user, get_all_chapters, get_chapter, get_favorates, get_formated_chapter, get_section, get_sections, get_user, search
-from app.Models import Chapter, ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, Section, SectionResponse, TokenModel, UserInDB, UserResponse
+from app.DB import add_favorate_db, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_formated_chapter, get_section, get_sections, get_user, search
+from app.Models import ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, SectionResponse, TokenModel, UserInDB, UserResponse
 
 app = FastAPI()
 
