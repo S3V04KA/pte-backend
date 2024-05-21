@@ -45,7 +45,9 @@ async def init():
     name = chapters[0]['content'][0]['content'][0]['content'][0]
     if 'ГЛАВА' in name:
         for i in chapters:
-            name  = i['content'][0]['content'][0]['content'][0]
+            name = ''
+            for n in i['content'][0]['content']:
+                name += n['content'][0] + ' '
             await chapters_collection.update_one({'_id': i['_id']}, {'$set': {'name': name}})
     
 asyncio.create_task(init())
