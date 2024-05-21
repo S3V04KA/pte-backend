@@ -43,7 +43,7 @@ async def init():
             section = await sections_collection.insert_one(Section(name=i, chapterIds=chsIds).model_dump())
     chapters = await chapters_collection.find().to_list(10)
     name = chapters[0]['content'][0]['content'][0]['content'][0]
-    if 'ГЛАВА' in name:
+    if 'глава' in chapters[0]['name'].lower():
         for i in chapters:
             name = ''
             for n in i['content'][0]['content']:
