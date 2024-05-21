@@ -41,6 +41,11 @@ async def init():
             chs = await chapters_collection.insert_many(chapters)
             chsIds = map(lambda c: str(c), chs.inserted_ids)
             section = await sections_collection.insert_one(Section(name=i, chapterIds=chsIds).model_dump())
+    chapters = await chapters_collection.find().to_list(10)
+    name = chapters[0]['content'][0]['content'][0]['content'][0]
+    if len(chapters[0]['name'].split(' ')) <= 2 and 'ГЛАВА' in name:
+        for i in chapters:
+            await chapters_collection.update_one({'_id': i['_id']}, {'$set': {'name': name}})
     
 asyncio.create_task(init())
 
