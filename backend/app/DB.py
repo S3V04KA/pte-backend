@@ -44,6 +44,7 @@ async def init():
     chapters = await chapters_collection.find().to_list(10)
     name = chapters[0]['content'][0]['content'][0]['content'][0]
     for i in chapters:
+        print(i['name'])
         if 'глава' in i['name'].lower():
             name = ''
             for n in i['content'][0]['content']:
