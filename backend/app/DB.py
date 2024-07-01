@@ -33,7 +33,7 @@ async def init():
             for root, dirs, files in os.walk(f'./docs/{i}'):
                 for file in files:
                     with open(f'./docs/{i}/{file}', 'r') as f:
-                        chapters.append(Chapter(name=' '.join(file.split('.')[0:2]), content=f.read()).model_dump())
+                        chapters.append(Chapter(name=' '.join(file.split('.')[0:len(file.split('.')-1)]), content=f.read()).model_dump())
             try:
                 chapters.sort(key=lambda chapter: int(chapter['name'].split(' ')[1]))
             except:
