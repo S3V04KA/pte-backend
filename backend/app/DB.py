@@ -173,17 +173,7 @@ async def search(substring: str):
         chapters.append({'name': chapter['name'], 'id': str(chapter['_id']), 'content': chapter['content'], 'sectionName': section['name']})
     cnt = 0
     for i in range(len(chapters)):
-        modified_elements = await find_substring_in_content(chapters[i]['content'], substring, 'highlighted')
-        for j in range(len(modified_elements)):
-            searchs.append(SearchResponse(id=cnt, chapterId=chapters[i]['id'], chapterName=chapters[i]['name'], iter=modified_elements[j]['iter'], contentElement=modified_elements[j]['el'], sectionName=chapters[i]['sectionName']))
+        if substring.lower() in chapters[i]['name'].lower() or substring.lower() in chapters[i]['content'].lower():
+            searchs.append(SearchResponse(id=cnt, chapterId=chapters[i]['id'], chapterName=chapters[i]['name'], sectionName=chapters[i]['sectionName']))
             cnt+=1
     return searchs
-
-async def get_formated_chapter(chapter_id: str, substring: str, iter: int):
-    chapter = await chapters_collection.find_one({"_id": ObjectId(chapter_id)})
-    if not chapter:
-        return None
-    content = chapter['content']
-    await update_class_value_if_substring_in_content(content, substring, 'highlighted')
-    json_str = json.dumps(content, ensure_ascii=False).replace(' highlighted', '', iter).replace('highlighted', 'Temp', 1).replace(' highlighted', '').replace('Temp', 'highlighted', 1)
-    return ChapterResponse(id=str(chapter['_id']), name=chapter['name'], content=json.loads(json_str))

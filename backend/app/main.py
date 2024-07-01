@@ -131,11 +131,8 @@ async def get_chapters() -> list[ChapterResponseNoContent]:
     return await get_all_chapters()
 
 @app.get('/chapter/{chapter_id}')
-async def get_highlighted_chapter(chapter_id: str, query: str | None = None, iter: int | None = None) -> ChapterResponse:
-    if query is None and iter is None:
-        return await get_chapter(chapter_id)
-    else:
-        return await get_formated_chapter(chapter_id, query, iter)
+async def get_highlighted_chapter(chapter_id: str) -> ChapterResponse:
+    return await get_chapter(chapter_id)
 
 @app.get('/section')
 async def get_sections_get() -> list[SectionResponse]:
