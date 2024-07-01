@@ -5,7 +5,7 @@
 	<meta name=Generator content="Microsoft Word 15 (filtered)">
 	<title>ВУХИН</title>
 
-	<style> mark { background-color: var(--main-second-select-color) !important; } mark.current { background-color: var(--main-select-color) !important; }
+	<style> mark { background-color: var(--main-second-select-color) !important; padding: 4 8; color: var(--second-text-color) !important; } mark.current { background-color: var(--main-select-color) !important; padding: 4 8; color: var(--second-text-color) !important; }
 		<!--
 		/* Font Definitions */
 		@font-face {
@@ -391,6 +391,7 @@
 			--main-text-color: #5F5C5D;
 			--main-select-color: #5F5C5D;
 			--main-second-select-color: #5F5C5D;
+      --second-text-color: #5F5C5D;
 		}
 
 		body {
@@ -16873,12 +16874,13 @@ margin-left:0in;text-indent:35.45pt;line-height:150%'><span lang=RU style='font-
                                 instance.unmark()
                             }
                             
-                            function setColors(background, textColor, selectColor, secondSelectColor) {
+                            function setColors(background, textColor, selectColor, secondSelectColor, secondTextColor) {
                               var r = document.querySelector(':root');
                               r.style.setProperty('--main-bg-color', background);
                               r.style.setProperty('--main-text-color', textColor);
                               r.style.setProperty('--main-select-color', selectColor);
                               r.style.setProperty('--main-second-select-color', secondSelectColor);
+                              r.style.setProperty('--second-text-color', secondTextColor);
                             }
                         </script>
                         
