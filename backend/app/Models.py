@@ -65,5 +65,3 @@ class SearchResponse(myBaseModel):
     chapterId: str
     chapterName: str
     sectionName: str
-    iter: int
-    contentElement: dict
