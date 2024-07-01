@@ -37,7 +37,7 @@ class UserResponse(UserInDB):
 
 class Chapter(myBaseModel):
     name: str
-    content: list
+    content: str
 
 class ChapterResponse(Chapter):
     id: str|ObjectId = Field(alias="id", default=None, validation_alias='_id')

@@ -1,5 +1,6 @@
 from datetime import timedelta
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 
@@ -63,6 +64,13 @@ async def add_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)) -> 
     if favorates is None:
         raise credentials_exception
     return favorates
+
+@app.get('/view/{chapter_id}', response_class=HTMLResponse)
+async def view(chapter_id: str) -> HTMLResponse:
+    chapter = await get_chapter(chapter_id)
+    if chapter is None:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+    return chapter['content']
 
 @app.delete('/users/favorates/{chapter_id}')
 async def delete_favorate(chapter_id: str, token: str = Depends(oauth2_scheme)) -> list[ChapterResponse]:

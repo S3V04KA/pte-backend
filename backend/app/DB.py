@@ -33,7 +33,7 @@ async def init():
             for root, dirs, files in os.walk(f'./docs/{i}'):
                 for file in files:
                     with open(f'./docs/{i}/{file}', 'r') as f:
-                        chapters.append(Chapter(name=file.split('.')[0], content=json.loads(f.read())).model_dump())
+                        chapters.append(Chapter(name=' '.join(file.split('.')[0:2]), content=f.read()).model_dump())
             try:
                 chapters.sort(key=lambda chapter: int(chapter['name'].split(' ')[1]))
             except:
@@ -41,13 +41,13 @@ async def init():
             chs = await chapters_collection.insert_many(chapters)
             chsIds = map(lambda c: str(c), chs.inserted_ids)
             section = await sections_collection.insert_one(Section(name=i, chapterIds=chsIds).model_dump())
-    chapters = await chapters_collection.find().to_list(100)
-    for i in chapters:
-        if not('приложение' in i['name'].lower()) and not('заключение' in i['name'].lower()):
-            name = ''
-            for n in i['content'][0]['content']:
-                name += n['content'][0] + ' '
-            await chapters_collection.update_one({'_id': i['_id']}, {'$set': {'name': name}})
+    # chapters = await chapters_collection.find().to_list(100)
+    # for i in chapters:
+    #     if not('приложение' in i['name'].lower()) and not('заключение' in i['name'].lower()):
+    #         name = ''
+    #         for n in i['content'][0]['content']:
+    #             name += n['content'][0] + ' '
+    #         await chapters_collection.update_one({'_id': i['_id']}, {'$set': {'name': name}})
     
 asyncio.create_task(init())
 
