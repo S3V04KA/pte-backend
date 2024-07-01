@@ -145,3 +145,90 @@ async def get_section_from_id(section_id: str) -> SectionResponse:
 @app.get('/search')
 async def search_post(query: str) -> list[SearchResponse]:
     return await search(query)
+
+@app.get('/script')
+async def get_script() -> str:
+    return """
+    var $input = $("input[type='search']"),
+                                // clear button
+                                $clearBtn = $("button[data-search='clear']"),
+                                // prev button
+                                $prevBtn = $("button[data-search='prev']"),
+                                // next button
+                                $nextBtn = $("button[data-search='next']"),
+                                // the context where to search
+                                $content = $("#content"),
+                                // jQuery object to save <mark> elements
+                                $results,
+                                // the class that will be appended to the current
+                                // focused element
+                                currentClass = "current",
+                                // top offset for the jump (the search bar)
+                                offsetTop = 50,
+                                // the current index of the focused element
+                                currentIndex = 0;
+
+                            function searchKeyword(keyword) {
+                                var searchVal = keyword;
+                                $content.unmark({
+                                    iframes: true,
+                                    done: function () {
+                                        $content.mark(searchVal, {
+                                            iframes: true,
+                                            separateWordSearch: true,
+                                            done: function () {
+                                                $results = $content.find("mark");
+                                                currentIndex = 0;
+                                                jumpTo();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                            function jumpTo() {
+                                if ($results.length) {
+                                    var position,
+                                        $current = $results.eq(currentIndex);
+                                    $results.removeClass(currentClass);
+                                    if ($current.length) {
+                                        $current.addClass(currentClass);
+                                        position = $current.offset().top - offsetTop;
+                                        window.scrollTo(0, position);
+                                    }
+                                }
+                            }
+
+                            function focusNext() {
+                                if ($results.length) {
+                                    console.log("length =", $results.length)
+                                    currentIndex += 1;
+                                    if (currentIndex < 0) {
+                                        currentIndex = $results.length - 1;
+                                    }
+                                    if (currentIndex > $results.length - 1) {
+                                        currentIndex = 0;
+                                    }
+                                    jumpTo();
+                                }
+                            }
+
+                            function focusPrevious() {
+                                if ($results.length) {
+                                    console.log("length =", $results.length)
+                                    currentIndex -= 1;
+                                    if (currentIndex < 0) {
+                                        currentIndex = $results.length - 1;
+                                    }
+                                    if (currentIndex > $results.length - 1) {
+                                        currentIndex = 0;
+                                    }
+                                    jumpTo();
+                                }
+                            }
+
+                            function unmark() {
+                                var instance = new Mark('#content');
+                                instance.unmark()
+                            }
+    """
