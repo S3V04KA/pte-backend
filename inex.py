@@ -6,6 +6,6 @@ for file in glob.glob('./backend/docs/**/*.html', recursive=True):
     print(file)
     with open(f'{file}', 'r', encoding='utf-8') as f:
       html = f.read()
-    html = html.replace("""src="ПТЭ%20КХП%20ворд_files""", """src="/images""")
+    html = html.replace("""src="/images""", """src="API_URL""")
     with open(f'{file}', 'w', encoding='utf-8') as f:
       f.write(html)
