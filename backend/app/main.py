@@ -2,6 +2,7 @@ from datetime import timedelta
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 
 from app.utils import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
@@ -145,3 +146,5 @@ async def get_section_from_id(section_id: str) -> SectionResponse:
 @app.get('/search')
 async def search_post(query: str) -> list[SearchResponse]:
     return await search(query)
+
+app.mount('/images', StaticFiles(directory='./images'), name='images')
