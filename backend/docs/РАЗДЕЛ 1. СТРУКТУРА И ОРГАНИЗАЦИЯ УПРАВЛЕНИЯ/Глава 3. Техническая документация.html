@@ -17154,8 +17154,12 @@ text-indent:35.45pt;line-height:150%'><span lang=RU>3.15. Планы мероп�
                                 instance.unmark()
                             }
                             
-                            function setColors(background, textColor, selectColor, secondSelectColor, secondTextColor) {
+                            function setColors(background, textColor, selectColor, secondSelectColor, secondTextColor, API_URL) {
                               var r = document.querySelector(':root');
+															var image = document.querySelectorAll('img');
+															image.forEach(img => {
+																img.setAttribute('src', API_URL + img.getAttribute('src'));
+															});
                               r.style.setProperty('--main-bg-color', background);
                               r.style.setProperty('--main-text-color', textColor);
                               r.style.setProperty('--main-select-color', selectColor);

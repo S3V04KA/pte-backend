@@ -148,3 +148,4 @@ async def search_post(query: str) -> list[SearchResponse]:
     return await search(query)
 
 app.mount('/images', StaticFiles(directory='./images'), name='images')
+app.mount('/docs', StaticFiles(directory='./docs'), name='docs')
