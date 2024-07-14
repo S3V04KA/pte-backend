@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 
 from app.utils import ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
-from app.DB import add_favorate_db, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
+from app.DB import add_favorate_db, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
 from app.Models import ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, SectionResponse, TokenModel, UserInDB, UserResponse
 
 app = FastAPI()
@@ -24,6 +24,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user.username}
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+@app.get("/users")
+async def read_users() -> list[UserResponse]:
+    users = await get_users()
+    return users
 
 @app.get("/users/me")
 async def read_users_me(token: str = Depends(oauth2_scheme)) -> UserResponse:

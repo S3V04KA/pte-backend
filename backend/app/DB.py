@@ -64,6 +64,11 @@ async def get_user(username: str):
         return user
     return None
 
+async def get_users():
+    users = await user_collection.find().to_list()
+    users = [UserResponse(**user) for user in users]
+    return users
+
 async def get_favorates(username: str):
     user = await user_collection.find_one({"username": username})
     if not user:
