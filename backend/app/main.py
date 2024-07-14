@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
-import h2o_wave
+from h2o_wave import Q
 from jose import JWTError, jwt
 
 from app.usersPage import show_users
@@ -33,7 +33,7 @@ async def read_users() -> list[UserResponse]:
     return users
 
 @app('/users_menu')
-async def serve(q: h2o_wave.Q):
+async def serve(q: Q):
     await show_users(q)
 
 @app.delete('/users')
