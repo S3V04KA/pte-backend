@@ -72,7 +72,7 @@ async def get_users():
         while True:
             i = await usersT.next()
             users.append(UserResponse(**i))
-    except StopIteration:
+    except:
         pass
     
     for i in usersT:
