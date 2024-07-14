@@ -10,13 +10,13 @@
   <meta name="description" content="O vuhine">
   
   <title>O vuhine</title>
-  <link rel="stylesheet" href="./O vuhine_files/bootstrap.min.css">
-  <link rel="stylesheet" href="./O vuhine_files/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="./O vuhine_files/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="./O vuhine_files/tether.min.css">
-  <link rel="stylesheet" href="./O vuhine_files/style.css">
-  <link rel="stylesheet" href="./O vuhine_files/style(1).css">
-  <link rel="preload" as="style" href="./O vuhine_files/mbr-additional.css"><link rel="stylesheet" href="./O vuhine_files/mbr-additional.css" type="text/css">
+  <link rel="stylesheet" href="/images/bootstrap.min.css">
+  <link rel="stylesheet" href="/images/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="/images/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="/images/tether.min.css">
+  <link rel="stylesheet" href="/images/style.css">
+  <link rel="stylesheet" href="/images/style(1).css">
+  <link rel="preload" as="style" href="/images/mbr-additional.css"><link rel="stylesheet" href="/images/mbr-additional.css" type="text/css">
   
   
   
@@ -278,17 +278,121 @@
 </section>
 
 
-  <script src="./O vuhine_files/jquery.min.js.Без названия"></script>
-  <script src="./O vuhine_files/popper.min.js.Без названия"></script>
-  <script src="./O vuhine_files/bootstrap.min.js.Без названия"></script>
-  <script src="./O vuhine_files/tether.min.js.Без названия"></script>
-  <script src="./O vuhine_files/smooth-scroll.js.Без названия"></script>
-  <script src="./O vuhine_files/nav-dropdown.js.Без названия"></script>
-  <script src="./O vuhine_files/navbar-dropdown.js.Без названия"></script>
-  <script src="./O vuhine_files/jquery.touch-swipe.min.js.Без названия"></script>
-  <script src="./O vuhine_files/jarallax.min.js.Без названия"></script>
-  <script src="./O vuhine_files/script.js.Без названия"></script>
+  <script src="/images/jquery.min.js"></script>
+  <script src="/images/popper.min.js"></script>
+  <script src="/images/bootstrap.min.js"></script>
+  <script src="/images/tether.min.js"></script>
+  <script src="/images/smooth-scroll.js"></script>
+  <script src="/images/nav-dropdown.js"></script>
+  <script src="/images/navbar-dropdown.js"></script>
+  <script src="/images/jquery.touch-swipe.min.js"></script>
+  <script src="/images/jarallax.min.js"></script>
+  <script src="/images/script.js"></script>
   
   
 
 </body></html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/jquery@3.1.0,mark.js@8.6.0(jquery.mark.min.js)" charset="UTF-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" charset="UTF-8"></script>
+<script>
+    var $input = $("input[type='search']"),
+        // clear button
+        $clearBtn = $("button[data-search='clear']"),
+        // prev button
+        $prevBtn = $("button[data-search='prev']"),
+        // next button
+        $nextBtn = $("button[data-search='next']"),
+        // the context where to search
+        $content = $("#content"),
+        // jQuery object to save <mark> elements
+        $results,
+        // the class that will be appended to the current
+        // focused element
+        currentClass = "current",
+        // top offset for the jump (the search bar)
+        offsetTop = 50,
+        // the current index of the focused element
+        currentIndex = 0;
+
+    function searchKeyword(keyword) {
+        var searchVal = keyword;
+        $content.unmark({
+            iframes: true,
+            done: function () {
+                $content.mark(searchVal, {
+                    iframes: true,
+                    separateWordSearch: false,
+                    done: function () {
+                        $results = $content.find("mark");
+                        currentIndex = 0;
+                        jumpTo();
+                    }
+                });
+            }
+        });
+    }
+
+    function jumpTo() {
+        if ($results.length) {
+            var position,
+                $current = $results.eq(currentIndex);
+            $results.removeClass(currentClass);
+            if ($current.length) {
+                $current.addClass(currentClass);
+                position = $current.offset().top - offsetTop;
+                window.scrollTo(0, position);
+            }
+        }
+    }
+
+    function focusNext() {
+        if ($results.length) {
+            console.log("length =", $results.length)
+            currentIndex += 1;
+            if (currentIndex < 0) {
+                currentIndex = $results.length - 1;
+            }
+            if (currentIndex > $results.length - 1) {
+                currentIndex = 0;
+            }
+            jumpTo();
+        }
+    }
+
+    function focusPrevious() {
+        if ($results.length) {
+            console.log("length =", $results.length)
+            currentIndex -= 1;
+            if (currentIndex < 0) {
+                currentIndex = $results.length - 1;
+            }
+            if (currentIndex > $results.length - 1) {
+                currentIndex = 0;
+            }
+            jumpTo();
+        }
+    }
+
+    function unmark() {
+        var instance = new Mark('#content');
+        instance.unmark()
+    }
+    
+    function setColors(background, textColor, selectColor, secondSelectColor, secondTextColor, API_URL) {
+      var r = document.querySelector(':root');
+                                    var image = document.querySelectorAll('img');
+                                    image.forEach(img => {
+                                        img.setAttribute('src', API_URL + img.getAttribute('src'));
+                                    });
+                                    var scripts = document.querySelectorAll('script');
+                                    scripts.forEach(script => {
+                                        script.setAttribute('src', API_URL + script.getAttribute('src'));
+                                    })
+      r.style.setProperty('--main-bg-color', background);
+      r.style.setProperty('--main-text-color', textColor);
+      r.style.setProperty('--main-select-color', selectColor);
+      r.style.setProperty('--main-second-select-color', secondSelectColor);
+      r.style.setProperty('--second-text-color', secondTextColor);
+    }
+</script>
