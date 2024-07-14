@@ -74,9 +74,6 @@ async def get_users():
             users.append(UserResponse(**i))
     except:
         pass
-    
-    for i in usersT:
-        users.append(UserResponse(**i))
     return users
 
 async def get_favorates(username: str):
