@@ -42,7 +42,6 @@ async def show_users(q: Q):
 async def delete_users(q: Q):
     for username in q.args.users:
         delete_user(username)
-    await show_users(q)
 
 app = FastAPI()
 
