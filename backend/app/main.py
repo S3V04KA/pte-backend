@@ -35,14 +35,10 @@ async def show_users(q: Q):
         q.client.initialized = True
         
     if q.args.delete_users:
-        await delete_users(q)
+        for username in q.args.users:
+            await delete_user(username)
   
     await q.page.save()
-
-async def delete_users(q: Q):
-    for username in q.args.users:
-        await delete_user(username)
-        q.args.delete_users = None
 
 app = FastAPI()
 
