@@ -1,0 +1,30 @@
+{# index_template.html #}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Управление пользователями</title>
+  <!-- Scripts and stylesheets required for Wave to work properly. -->
+  {{ wave_files }}
+</head>
+<style>
+  /* Must have position: relative and some size specified (e.g. height, flexbox, absolute positioning etc.). */
+  .wave-container {
+    position: relative;
+    height: 800px;
+  }
+</style>
+
+<!-- Websocket URL can be changed if needed. Defaults to "/_s/". -->
+<body data-wave-socket-url="/users_menu/">
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div class="wave-container">
+    <!-- Wave renders here. -->
+    <div id="wave-root"></div>
+  </div>
+</body>
+
+</html>

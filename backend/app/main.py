@@ -1,12 +1,11 @@
 from datetime import datetime
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, WebSocket, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
-import h2o_wave
 from jose import JWTError, jwt
-
-from app.usersPage import show_users
+from h2o_lightwave import wave_serve
+from app.usersPage import serve_users
 from app.utils import ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
 from app.DB import add_favorate_db, delete_user, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
 from app.Models import ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, SectionResponse, TokenModel, UserInDB, UserResponse
@@ -32,9 +31,14 @@ async def read_users() -> list[UserResponse]:
     users = await get_users()
     return users
 
-@h2o_wave.app('/users_menu')
-async def serve(q: h2o_wave.Q):
-    await show_users(q)
+@app.websocket('/users_menu/')
+async def ws(ws: WebSocket):
+    try:
+        await ws.accept()
+        await wave_serve(serve_users, ws.send_text, ws.receive_text)
+        await ws.close()
+    except:
+        pass
 
 @app.delete('/users')
 async def delete_user_api(username: str) -> bool:
@@ -163,3 +167,4 @@ async def search_post(query: str) -> list[SearchResponse]:
 
 app.mount('/images', StaticFiles(directory='./images'), name='images')
 app.mount('/documents', StaticFiles(directory='./docs'), name='docs')
+app.mount('/', StaticFiles(directory='./static', html=True), name='/')
