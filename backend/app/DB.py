@@ -65,7 +65,7 @@ async def get_user(username: str):
     return None
 
 async def get_users():
-    users = await user_collection.find()
+    users = user_collection.find()
     users = [UserResponse(**user) for user in users]
     return users
 
