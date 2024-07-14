@@ -27,12 +27,17 @@ async def make_table():
   )
 
 async def show_users(q: Q):
-  q.page['users_menu'] = ui.form_card(
-    box='1 1 6 7',
-    items=[ui.buttons([ui.button(name='delete_users', label='Удалить', primary=True)]), await make_table()]
-  )
+    if not q.client.initialized:
+        q.page['users_menu'] = ui.form_card(
+          box='1 1 6 7',
+          items=[ui.buttons([ui.button(name='delete_users', label='Удалить', primary=True)]), await make_table()]
+        )
+        q.client.initialized = True
+        
+    if q.args.delete_users:
+        await delete_users(q)
   
-  await q.page.save()
+    await q.page.save()
 
 async def delete_users(q: Q):
     for username in q.args.users:
