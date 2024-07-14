@@ -32,7 +32,7 @@ async def read_users() -> list[UserResponse]:
     users = await get_users()
     return users
 
-@app.websocket('/users_menu/')
+@app.websocket('/_s/')
 async def ws(ws: WebSocket):
     try:
         await ws.accept()
