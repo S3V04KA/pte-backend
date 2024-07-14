@@ -4,14 +4,46 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
-from h2o_lightwave import wave_serve
+from h2o_lightwave import wave_serve, Q, ui
 from h2o_lightwave_web import web_directory
-from app.usersPage import serve_users
 from app.utils import ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
 from app.DB import add_favorate_db, delete_user, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
 from app.Models import ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, SectionResponse, TokenModel, UserInDB, UserResponse
 
+async def make_table(q: Q):
+  users = await get_users()
+  columns = [
+    ui.table_column(name='name', label='Логин'),
+    ui.table_column(name='email', label='Почта'),
+    ui.table_column(name='full_name', label='Полное имя'),
+    ui.table_column(name='created_at', label='Создан'),
+  ]
+  
+  return ui.table(
+    name='users',
+    columns=columns,
+    rows=[ui.table_row(name=user['username'], cells=[user['username'], user['email'], user['full_name'], user['created_at']]) for user in users],
+    multiple=True
+  )
+
+async def show_users(q: Q):
+  q.page['users_menu'] = ui.form_card(
+    box='1 1 6 7',
+    items=[await make_table(), ui.buttons([ui.button(name='delete', label='Удалить', primary=True)])]
+  )
+  
+  await q.page.save()
+
 app = FastAPI()
+
+@app.websocket("/_s/")
+async def ws(ws: WebSocket):
+    try:
+        await ws.accept()
+        await wave_serve(show_users, ws.send_text, ws.receive_text)
+        await ws.close()
+    except WebSocketDisconnect:
+        pass
 
 @app.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -> TokenModel:
@@ -31,15 +63,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 async def read_users() -> list[UserResponse]:
     users = await get_users()
     return users
-
-@app.websocket("/_s/")
-async def ws(ws: WebSocket):
-    try:
-        await ws.accept()
-        await wave_serve(serve_users, ws.send_text, ws.receive_text)
-        await ws.close()
-    except WebSocketDisconnect:
-        pass
 
 @app.delete('/users')
 async def delete_user_api(username: str) -> bool:
