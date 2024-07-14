@@ -67,6 +67,14 @@ async def get_user(username: str):
 async def get_users():
     usersT = user_collection.find({})
     users = []
+    
+    try:
+        while True:
+            i = await usersT.next()
+            users.append(UserResponse(**i))
+    except StopIteration:
+        pass
+    
     for i in usersT:
         users.append(UserResponse(**i))
     return users
