@@ -37,6 +37,7 @@ async def show_users(q: Q):
     if q.args.delete_users:
         for username in q.args.users:
             await delete_user(username)
+        q.page['users_menu'].items = [ui.buttons([ui.button(name='delete_users', label='Удалить', primary=True)]), await make_table()]
   
     await q.page.save()
 
