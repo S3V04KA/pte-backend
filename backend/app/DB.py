@@ -76,6 +76,13 @@ async def get_users():
         pass
     return users
 
+async def delete_user(username: str):
+    user = await user_collection.find_one({"username": username})
+    if not user:
+        return False
+    await user_collection.delete_one({"_id": user['_id']})
+    return True
+
 async def get_favorates(username: str):
     user = await user_collection.find_one({"username": username})
     if not user:
