@@ -22,17 +22,22 @@ async def make_table():
   return ui.table(
     name='users',
     columns=columns,
-    rows=[ui.table_row(name=user.username, cells=[user.username, user.email, user.full_name, user.created_at.strftime('%m/%d/%Y')]) for user in users],
+    rows=[ui.table_row(name=user.username, cells=[user.username, user.email, user.full_name, user.created_at.strftime('%d.%m.%Y')]) for user in users],
     multiple=True
   )
 
 async def show_users(q: Q):
   q.page['users_menu'] = ui.form_card(
     box='1 1 6 7',
-    items=[await make_table(), ui.buttons([ui.button(name='delete', label='Удалить', primary=True)])]
+    items=[ui.buttons([ui.button(name='delete_users', label='Удалить', primary=True)]), await make_table()]
   )
   
   await q.page.save()
+
+async def delete_users(q: Q):
+    for username in q.args.users:
+        delete_user(username)
+    await show_users(q)
 
 app = FastAPI()
 
