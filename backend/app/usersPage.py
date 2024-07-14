@@ -18,7 +18,7 @@ async def make_table(q: Q):
   )
 
 async def show_users(q: Q):
-  q.page['users'] = ui.form_card(
+  q.page['users_menu'] = ui.form_card(
     box='1 1 6 7',
     items=[await make_table(), ui.buttons([ui.button(name='delete', label='Удалить', primary=True)])]
   )

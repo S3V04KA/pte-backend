@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 from h2o_lightwave import wave_serve
+from h2o_lightwave_web import web_directory
 from app.usersPage import serve_users
 from app.utils import ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
 from app.DB import add_favorate_db, delete_user, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
@@ -167,4 +168,4 @@ async def search_post(query: str) -> list[SearchResponse]:
 
 app.mount('/images', StaticFiles(directory='./images'), name='images')
 app.mount('/documents', StaticFiles(directory='./docs'), name='docs')
-app.mount('/', StaticFiles(directory='./static', html=True), name='/')
+app.mount('/', StaticFiles(directory=web_directory, html=True), name='/')
