@@ -22,7 +22,7 @@ async def make_table():
   return ui.table(
     name='users',
     columns=columns,
-    rows=[ui.table_row(name=user.username, cells=[user.username, user.email, user.full_name, user.created_at]) for user in users],
+    rows=[ui.table_row(name=user.username, cells=[user.username, user.email, user.full_name, user.created_at.strftime('%m/%d/%Y')]) for user in users],
     multiple=True
   )
 
