@@ -10,7 +10,6 @@ from app.DB import get_user
 # Секретный ключ для создания JWT токена
 SECRET_KEY = os.environ.get('SECRET_KEY')
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

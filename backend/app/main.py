@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
@@ -20,9 +20,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = await create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.username}
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
@@ -124,7 +123,7 @@ async def register_user(user: RegisterUser):
     # Удалите пароль в открытом виде из словаря, чтобы не сохранять его
     del user_dict["password"]
     user_dict['disabled'] = False
-    await add_user(UserInDB(**user_dict))
+    await add_user(UserInDB(created_at=datetime.now(), **user_dict))
     return {"message": "User successfully registered"}
 
 @app.get('/chapter')

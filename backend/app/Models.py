@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
@@ -31,6 +32,7 @@ class RegisterUser(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
+    created_at: datetime
 
 class UserResponse(UserInDB):
     id: str|ObjectId = Field(alias="id", default=None, validation_alias='_id')
