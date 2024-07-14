@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import Depends, FastAPI, HTTPException, WebSocket, status
+from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
@@ -32,13 +32,13 @@ async def read_users() -> list[UserResponse]:
     users = await get_users()
     return users
 
-@app.websocket('/_s/')
+@app.websocket("/_s/")
 async def ws(ws: WebSocket):
     try:
         await ws.accept()
         await wave_serve(serve_users, ws.send_text, ws.receive_text)
         await ws.close()
-    except:
+    except WebSocketDisconnect:
         pass
 
 @app.delete('/users')
