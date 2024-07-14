@@ -65,8 +65,10 @@ async def get_user(username: str):
     return None
 
 async def get_users():
-    users = list(user_collection.find({}))
-    users = [UserResponse(**user) for user in users]
+    usersT = user_collection.find({})
+    users = []
+    for i in usersT:
+        users.append(UserResponse(**i))
     return users
 
 async def get_favorates(username: str):
