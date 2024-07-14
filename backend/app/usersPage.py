@@ -1,4 +1,4 @@
-from h2o_wave import main, app, Q, ui
+from h2o_lightwave import Q, ui
 from app.DB import get_users
 
 async def make_table(q: Q):
@@ -24,3 +24,6 @@ async def show_users(q: Q):
   )
   
   await q.page.save()
+  
+async def serve_users(q: Q):
+  await show_users(q)
