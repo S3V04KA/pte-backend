@@ -10,7 +10,7 @@ from app.utils import ALGORITHM, SECRET_KEY, authenticate_user, create_access_to
 from app.DB import add_favorate_db, delete_user, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
 from app.Models import ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, SectionResponse, TokenModel, UserInDB, UserResponse
 
-async def make_table(q: Q):
+async def make_table():
   users = await get_users()
   columns = [
     ui.table_column(name='name', label='Логин'),
