@@ -182,7 +182,7 @@ async def get_chapters() -> list[ChapterResponseNoContent]:
 
 @app.post('/chapters/many')
 async def get_many_chapters(chapter_dto: ChaptersManyRequest) -> list[ChapterResponseNoContent]:
-    return await get_many_chapters_db(chapter_ids=chapter_dto['chapter_ids'])
+    return await get_many_chapters_db(chapter_ids=chapter_dto.ids)
 
 @app.get('/chapter/{chapter_id}')
 async def get_highlighted_chapter(chapter_id: str) -> ChapterResponse:
