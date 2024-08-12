@@ -122,6 +122,9 @@ async def get_all_chapters():
         chapters.append(ChapterResponseNoContent(id=str(chapter['_id']), name=chapter['name']))
     return chapters
 
+async def get_many_chapters_db(chapter_ids: list[str]):
+    return await get_many_chapters(chapter_ids)
+
 async def get_chapter(chapter_id: str):
     chapter: ChapterResponse = await chapters_collection.find_one({"_id": ObjectId(chapter_id)})
     if not chapter:

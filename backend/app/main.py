@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from h2o_lightwave import wave_serve, Q, ui
 from h2o_lightwave_web import web_directory
 from app.utils import ALGORITHM, SECRET_KEY, authenticate_user, create_access_token, get_password_hash, oauth2_scheme
-from app.DB import add_favorate_db, delete_user, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
+from app.DB import add_favorate_db, delete_user, get_many_chapters_db, get_users, add_user, delete_favorate_db, get_all_chapters, get_chapter, get_favorates, get_section, get_sections, get_user, search
 from app.Models import ChapterResponse, ChapterResponseNoContent, RegisterUser, SearchResponse, SectionResponse, TokenModel, UserInDB, UserResponse
 
 async def make_table():
@@ -179,6 +179,10 @@ async def register_user(user: RegisterUser):
 @app.get('/chapter')
 async def get_chapters() -> list[ChapterResponseNoContent]:
     return await get_all_chapters()
+
+@app.post('/chapters/many')
+async def get_many_chapters(chapter_ids: list[str]) -> list[ChapterResponseNoContent]:
+    return await get_many_chapters_db(chapter_ids)
 
 @app.get('/chapter/{chapter_id}')
 async def get_highlighted_chapter(chapter_id: str) -> ChapterResponse:
