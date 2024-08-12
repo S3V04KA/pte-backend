@@ -62,6 +62,9 @@ class SectionResponse(Section):
     id: str|ObjectId = Field(alias="id", default=None, validation_alias='_id')
     chapters: list[ChapterResponse]|list[ChapterResponseNoContent] = []
     
+class ChaptersManyRequest:
+    ids: list[str]
+
 class SearchResponse(myBaseModel):
     id: int
     chapterId: str
