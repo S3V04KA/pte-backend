@@ -63,7 +63,7 @@ class SectionResponse(Section):
     chapters: list[ChapterResponse]|list[ChapterResponseNoContent] = []
     
 class ChaptersManyRequest(BaseModel):
-    ids: list[str]
+    ids: list[str] = Field(default_factory=[], alias='ids', validation_alias='ids')
 
 class SearchResponse(myBaseModel):
     id: int
