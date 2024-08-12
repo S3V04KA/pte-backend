@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -63,7 +63,7 @@ class SectionResponse(Section):
     chapters: list[ChapterResponse]|list[ChapterResponseNoContent] = []
     
 class ChaptersManyRequest(BaseModel):
-    ids: list[str] = Field(default_factory=[], alias='ids', validation_alias='ids')
+    ids: List[str] = []
 
 class SearchResponse(myBaseModel):
     id: int
